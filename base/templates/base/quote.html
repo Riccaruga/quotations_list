@@ -1,0 +1,40 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+
+<h1>Quote #{{ quote.id }}</h1>
+
+<p><strong>Title:</strong> {{ quote.title }}</p>
+<p><strong>Manager:</strong> {{ quote.manager }}</p>
+<p><strong>Client:</strong> {{ quote.client }}</p>
+<p><strong>Machine Type:</strong> {{ quote.get_machine_type_display }}</p>
+<p><strong>Description:</strong> {{ quote.description }}</p>
+
+<hr>
+
+{% if quote.machine_type == 'laser_cutting' %}
+    <p><strong>Working Area:</strong> {{ quote.working_area }}</p>
+    <p><strong>Laser Source Power:</strong> {{ quote.laser_source_power }}</p>
+    <p><strong>Compressor:</strong> {{ quote.compressor }}</p>
+    <p><strong>Stabilizer:</strong> {{ quote.stabilizer }}</p>
+    <p><strong>Bevel Laser Head:</strong> {{ quote.bevel_laser_head }}</p>
+    <p><strong>Additional Requirements:</strong> {{ quote.laser_additional_requirements }}</p>
+{% elif quote.machine_type == 'press_brake' %}
+    <p><strong>Bending Capacity:</strong> {{ quote.bending_capacity }}</p>
+    <p><strong>Working Length:</strong> {{ quote.working_length }}</p>
+    <p><strong>CNC Type:</strong> {{ quote.cnc_type }}</p>
+    <p><strong>Axis Type:</strong> {{ quote.axis_type }}</p>
+    <p><strong>Additional Requirements:</strong> {{ quote.press_brake_additional_requirements }}</p>
+{% elif quote.machine_type == 'tube_laser' %}
+    <p><strong>Tube Length:</strong> {{ quote.tube_length }}</p>
+    <p><strong>Tube Diameter:</strong> {{ quote.tube_diameter }}</p>
+    <p><strong>Length of Unloading Table:</strong> {{ quote.length_of_unloading_table }}</p>
+    <p><strong>Automatic Loading:</strong> {{ quote.automatic_loading }}</p>
+    <p><strong>Semi-Automatic Loading:</strong> {{ quote.semi_automatic_loading }}</p>
+    <p><strong>Manual Loading:</strong> {{ quote.manual_loading }}</p>
+    <p><strong>Additional Requirements:</strong> {{ quote.tube_laser_additional_requirements }}</p>
+{% endif %}
+
+<hr>
+
+{% endblock %}

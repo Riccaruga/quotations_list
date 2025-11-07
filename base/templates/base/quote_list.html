@@ -1,0 +1,122 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+
+<div class="auth-section">
+  {% if request.user.is_authenticated %}
+    <div>Welcome, <strong>{{ request.user }}</strong></div>
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn">Login</a>
+  {% endif %}
+</div>
+
+<hr>
+
+<h1>Quotation List</h1>
+
+<a href="{% url 'quote-create' %}" class="btn">+ New Quote</a>
+
+<style>
+.status-completed {
+    color: #10B981;  /* Green */
+    font-weight: bold;
+}
+
+.status-pending {
+    color: #EF4444;  /* Red */
+    font-weight: bold;
+}
+
+.row-completed {
+    background-color: #F0FDF4;  /* Very light green */
+    border-left: 4px solid #10B981;  /* Green accent */
+}
+
+.row-pending {
+    background-color: #FFF7ED;  /* Very light orange */
+    border-left: 4px solid #F97316;  /* Orange accent */
+}
+
+.row-completed:hover {
+    background-color: #DCFCE7;  /* Slightly darker green on hover */
+}
+
+.row-pending:hover {
+    background-color: #FFEDD5;  /* Slightly darker orange on hover */
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+tr {
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #F9FAFB;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #6B7280;
+}
+</style>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th style="width: 150px;">Created</th>
+    <th>Completed</th>
+    <th>Title</th>
+    <th>Manager</th>
+    <th>Client</th>
+    <th>Machine Type</th>
+    <th colspan="3">Actions</th>
+  </tr>
+  {% for quote in quotes %}
+  <tr class="{% if quote.completed %}row-completed{% else %}row-pending{% endif %}">
+    <td>{{ quote.id }}</td>
+    <td>
+        <div style="line-height: 1.2;">
+            <div>{{ quote.created_at|date:"d-m-Y" }}</div>
+            <div style="font-size: 0.9em; color: #666;">{{ quote.created_at|time:"H:i" }}</div>
+        </div>
+    </td>
+    <td>
+        {% if quote.completed %}
+            <span class="status-completed">✓</span>
+        {% else %}
+            <span class="status-pending">✗</span>
+        {% endif %}
+    </td>
+    <td>{{ quote.title }}</td>
+    <td>{{ quote.manager }}</td>
+    <td>{{ quote.client }}</td>
+    <td>{{ quote.get_machine_type_display }}</td>
+    <td><a href="{% url 'quote' quote.id %}">View</a></td>
+    <td><a href="{% url 'quote-update' quote.id %}">Edit</a></td>
+    <td><a href="{% url 'quote-delete' quote.id %}">Delete</a></td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="5">No quotes found.</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
