@@ -1,3 +1,6 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
+from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Quote
@@ -23,6 +26,14 @@ class QuoteDetail(LoginRequiredMixin, DetailView):
     model = Quote
     context_object_name = 'quote'
     template_name = 'base/quote.html'
+
+@require_POST
+def toggle_complete(request, pk):
+    quote = get_object_or_404(Quote, pk=pk)
+    quote.completed = not quote.completed
+    quote.save()
+    messages.success(request, f'Quote #{quote.id} marked as {"completed" if quote.completed else "pending"}')
+    return redirect('quotes')
 
 class QuoteCreate(LoginRequiredMixin, CreateView):
     model = Quote
