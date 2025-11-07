@@ -100,6 +100,13 @@
             <label for="{{ form.length_of_unloading_table.id_for_label }}">Length of Unloading Table</label>
             {{ form.length_of_unloading_table }}
         </div>
+
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                {{ form.bevel_laser_head }}
+                <span>Bevel Laser Head</span>
+            </label>
+        </div>
         
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
@@ -122,6 +129,11 @@
             </label>
         </div>
         
+        <div class="form-group">
+            <label for="{{ form.additional_requirements.id_for_label }}">Additional Requirements</label>
+            {{ form.additional_requirements }}
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
             <a href="{% url 'quotes' %}" class="btn btn-secondary">Cancel</a>

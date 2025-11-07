@@ -1,13 +1,13 @@
 from django.db import models
 
 class Quote(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True, null=True)  # Making it nullable temporarily
     manager = models.CharField(max_length=200)
     client = models.CharField(max_length=200)
 
     MACHINE_CHOICES = [
         ('laser_cutting', 'Laser Cutting Machine'),
-        ('press_brake', 'Press Brake'),
+        ('press_brake', 'Press Brake'), 
         ('tube_laser', 'Tube Laser Cutting Machine'),
     ]
 
@@ -54,6 +54,6 @@ class Quote(models.Model):
     def __str__(self):
         return f"{self.title} - {self.get_machine_type_display()}"
 
-    class Meta:
-        ordering = ['completed']
+    #class Meta:
+    #    ordering = ['completed']
     
