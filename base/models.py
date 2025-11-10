@@ -48,6 +48,7 @@ class Quote(models.Model):
 
     completed = models.BooleanField(default=False)
     additional_requirements = models.TextField(blank=True, null=True)
+    attachment = models.FileField(upload_to='quote_attachments/%Y/%m/%d/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

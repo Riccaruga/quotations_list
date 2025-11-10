@@ -99,9 +99,30 @@
             <th>Request text:</th>
             <td>{% if quote.request_text %}{{ quote.request_text }}{% else %}Please send a quotation for {{ quote.get_machine_type_display }}{% endif %}</td>
         </tr>
-
+        
+        {% if quote.attachment %}
+        <tr>
+            <th>Attachment:</th>
+            <td>
+                {% if quote.attachment and quote.attachment.url %}
+                    <a href="{{ quote.attachment.url }}" target="_blank" class="attachment-link">
+                        <i class="fas fa-paperclip"></i>
+                        {{ quote.attachment.name|slice:":30" }}{% if quote.attachment.name|length > 30 %}...{% endif %}
+                    </a>
+                {% else %}
+                    <span class="text-muted">No file attached or file not found</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
 
     </table>
+
+    <div class="timestamp">
+        <span class="timestamp-label">Created:</span>
+        <span class="timestamp-value">{{ quote.created_at|date:"d M Y, H:i" }}</span>
+    </div>
+
 </div>
 
 <style>
@@ -143,6 +164,46 @@
 .additional-requirements td {
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+.attachment-link {
+    display: inline-flex;
+    align-items: center;
+    color: #2563eb;
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background-color: #f8fafc;
+    transition: all 0.2s;
+}
+
+.attachment-link:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.attachment-link i {
+    margin-right: 8px;
+    color: #64748b;
+}
+
+.timestamp {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.timestamp-label {
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.timestamp-value {
+    font-family: monospace;
 }
 
 /* Responsive table */

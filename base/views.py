@@ -4,7 +4,10 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Quote
+from .forms import QuoteForm
 from django.urls import reverse_lazy
+from django.conf import settings
+import os
 
 from django.contrib.auth.views import LoginView
 
@@ -26,6 +29,11 @@ class QuoteDetail(LoginRequiredMixin, DetailView):
     model = Quote
     context_object_name = 'quote'
     template_name = 'base/quote.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['has_attachment'] = bool(self.object.attachment)
+        return context
 
 @require_POST
 def toggle_complete(request, pk):
@@ -37,17 +45,51 @@ def toggle_complete(request, pk):
 
 class QuoteCreate(LoginRequiredMixin, CreateView):
     model = Quote
-    fields = '__all__'
+    form_class = QuoteForm
+    template_name = 'base/quote_form.html'
     success_url = reverse_lazy('quotes')
     
     def form_valid(self, form):
         form.instance.user = self.request.user
+        self.object = form.save(commit=False)
+        if 'attachment' in self.request.FILES:
+            self.object.attachment = self.request.FILES['attachment']
+        self.object.save()
         return super().form_valid(form)
+        
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'data': self.request.POST or None,
+            'files': self.request.FILES or None,
+        })
+        return kwargs
 
 class QuoteUpdate(LoginRequiredMixin, UpdateView):
     model = Quote
-    fields = '__all__'
+    form_class = QuoteForm
+    template_name = 'base/quote_form.html'
     success_url = reverse_lazy('quotes')
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'data': self.request.POST or None,
+            'files': self.request.FILES or None,
+        })
+        return kwargs
+        
+    def form_valid(self, form):
+        # Save the form with the uploaded file
+        self.object = form.save(commit=False)
+        if 'attachment-clear' in self.request.POST:
+            # If the clear checkbox is checked, delete the file
+            self.object.attachment.delete(save=False)
+        elif 'attachment' in self.request.FILES:
+            # If a new file is uploaded, save it
+            self.object.attachment = self.request.FILES['attachment']
+        self.object.save()
+        return super().form_valid(form)
 
 class QuoteDelete(LoginRequiredMixin, DeleteView):
     model = Quote

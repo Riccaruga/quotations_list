@@ -7,7 +7,7 @@
         <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Quote</h1>
     </div>
     
-    <form method="post" id="quoteForm" class="form-container">
+    <form method="post" id="quoteForm" class="form-container" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div class="form-row">
@@ -58,14 +58,7 @@
                 <span>Stabilizer</span>
             </label>
         </div>
-        
-        <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                {{ form.bevel_laser_head }}
-                <span>Bevel Laser Head</span>
-            </label>
-        </div>
-        
+
         <div class="form-group">
             <label for="{{ form.bending_capacity.id_for_label }}">Bending Capacity</label>
             {{ form.bending_capacity }}
@@ -100,13 +93,6 @@
             <label for="{{ form.length_of_unloading_table.id_for_label }}">Length of Unloading Table</label>
             {{ form.length_of_unloading_table }}
         </div>
-
-        <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                {{ form.bevel_laser_head }}
-                <span>Bevel Laser Head</span>
-            </label>
-        </div>
         
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
@@ -121,11 +107,19 @@
                 <span>Semi-automatic Loading</span>
             </label>
         </div>
-        
+
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
                 {{ form.manual_loading }}
                 <span>Manual Loading</span>
+            </label>
+        </div>
+
+        
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                {{ form.bevel_laser_head }}
+                <span>Bevel Laser Head</span>
             </label>
         </div>
         
@@ -134,13 +128,85 @@
             {{ form.additional_requirements }}
         </div>
 
+        <div class="form-group">
+            <label for="{{ form.attachment.id_for_label }}">Attachment</label>
+            {% if form.instance.attachment %}
+                <div class="current-file">
+                    <i class="fas fa-paperclip"></i>
+                    <a href="{{ form.instance.attachment.url }}" target="_blank">
+                        {{ form.instance.attachment.name|slice:":30" }}{% if form.instance.attachment.name|length > 30 %}...{% endif %}
+                    </a>
+                    <label class="replace-file">
+                        {{ form.attachment }}
+                        <span class="replace-text">(Replace)</span>
+                    </label>
+                </div>
+            {% else %}
+                {{ form.attachment }}
+            {% endif %}
+            <small class="form-text text-muted">
+                Upload any relevant files (e.g., drawings, specifications)
+            </small>
+        </div>
+
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a href="{% url 'quotes' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+            <button type="button" class="btn btn-secondary btn-sm"><a href="{% url 'quotes' %}">Cancel</a></button>
         </div>
     </form>
 </div>
 <style>
+.file-input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.current-file {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.current-file a {
+    color: #2563eb;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.current-file a:hover {
+    text-decoration: underline;
+}
+
+.current-file .replace-file {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.current-file .replace-file input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.current-file .replace-text {
+    color: #2563eb;
+    text-decoration: underline;
+    margin-left: 5px;
+}
+
+.current-file .replace-text:hover {
+    text-decoration: none;
+}
+
 .compact-form {
     max-width: 900px;
     margin: 15px auto;
@@ -268,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ],
         'tube_laser': [
             'tube_length', 'tube_diameter', 'length_of_unloading_table',
-            'automatic_loading', 'semi_automatic_loading', 'manual_loading', 'additional_requirements'
+            'automatic_loading', 'semi_automatic_loading', 'manual_loading', 'additional_requirements', 'bevel_laser_head'
         ]
     };
 
