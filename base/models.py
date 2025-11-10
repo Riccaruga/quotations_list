@@ -45,6 +45,9 @@ class Quote(models.Model):
     automatic_loading = models.BooleanField(default=False)
     semi_automatic_loading = models.BooleanField(default=False)
     manual_loading = models.BooleanField(default=False)
+    two_chucks = models.BooleanField(default=False)
+    three_chucks = models.BooleanField(default=False)
+
 
     completed = models.BooleanField(default=False)
     additional_requirements = models.TextField(blank=True, null=True)

@@ -31,18 +31,24 @@
                 <th>Laser Source Power:</th>
                 <td>{{ quote.laser_source_power|default:"-" }}</td>
             </tr>
+            {% if quote.compressor %}
             <tr>
                 <th>Compressor:</th>
-                <td>{{ quote.compressor|yesno:"Yes,No,-" }}</td>
+                <td>Yes</td>
             </tr>
+            {% endif %}
+            {% if quote.stabilizer %}
             <tr>
                 <th>Stabilizer:</th>
-                <td>{{ quote.stabilizer|yesno:"Yes,No,-" }}</td>
+                <td>Yes</td>
             </tr>
+            {% endif %}
+            {% if quote.bevel_laser_head %}
             <tr>
                 <th>Bevel Laser Head:</th>
-                <td>{{ quote.bevel_laser_head|yesno:"Yes,No,-" }}</td>
+                <td>Yes</td>
             </tr>
+            {% endif %}
 
         {% elif quote.machine_type == 'press_brake' %}
             <tr>
@@ -75,18 +81,36 @@
                 <th>Length of Unloading Table:</th>
                 <td>{{ quote.length_of_unloading_table|default:"-" }}</td>
             </tr>
+            {% if quote.automatic_loading %}
             <tr>
                 <th>Automatic Loading:</th>
-                <td>{{ quote.automatic_loading|yesno:"Yes,No,-" }}</td>
+                <td>Yes</td>
             </tr>
+            {% endif %}
+            {% if quote.semi_automatic_loading %}
             <tr>
-                <th>Semi-Automatic Loading:</th>
-                <td>{{ quote.semi_automatic_loading|yesno:"Yes,No,-" }}</td>
+                <th>Semi-automatic Loading:</th>
+                <td>Yes</td>
             </tr>
+            {% endif %}
+            {% if quote.manual_loading %}
             <tr>
                 <th>Manual Loading:</th>
-                <td>{{ quote.manual_loading|yesno:"Yes,No,-" }}</td>
+                <td>Yes</td>
             </tr>
+            {% endif %}
+            {% if quote.two_chucks %}
+            <tr>
+                <th>Two Chucks:</th>
+                <td>Yes</td>
+            </tr>
+            {% endif %}
+            {% if quote.three_chucks %}
+            <tr>
+                <th>Three Chucks:</th>
+                <td>Yes</td>
+            </tr>
+            {% endif %}
         {% endif %}
 
         {% if quote.additional_requirements %}

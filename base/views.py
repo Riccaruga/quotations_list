@@ -24,6 +24,23 @@ class CustomLoginView(LoginView):
 class QuoteList(LoginRequiredMixin, ListView):
     model = Quote
     context_object_name = 'quotes'
+    template_name = 'base/quote_list.html'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        status = self.request.GET.get('status', 'all')
+        
+        if status == 'pending':
+            return queryset.filter(completed=False).order_by('-created_at')
+        elif status == 'completed':
+            return queryset.filter(completed=True).order_by('-created_at')
+        else:
+            return queryset.order_by('-created_at')
+            
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_status'] = self.request.GET.get('status', 'all')
+        return context
     
 class QuoteDetail(LoginRequiredMixin, DetailView):
     model = Quote
