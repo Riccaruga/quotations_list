@@ -44,20 +44,6 @@
             <label for="{{ form.laser_source_power.id_for_label }}">Laser Source Power</label>
             {{ form.laser_source_power }}
         </div>
-        
-        <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                {{ form.compressor }}
-                <span>Compressor</span>
-            </label>
-        </div>
-        
-        <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                {{ form.stabilizer }}
-                <span>Stabilizer</span>
-            </label>
-        </div>
 
         <div class="form-group">
             <label for="{{ form.bending_capacity.id_for_label }}">Bending Capacity</label>
@@ -94,17 +80,34 @@
             {{ form.length_of_unloading_table }}
         </div>
 
+        <hr>
+        <div class="form-section-header">Options:</div>
+        
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                {{ form.compressor }}
+                <span>Compressor</span>
+            </label>
+        </div>
+        
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                {{ form.stabilizer }}
+                <span>Stabilizer</span>
+            </label>
+        </div>
+
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
                 {{ form.two_chucks }}
-                <span>Two Chucks</span>
+                <span>2 Chucks</span>
             </label>
         </div>
         
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
                 {{ form.three_chucks }}
-                <span>Three Chucks</span>
+                <span>3 Chucks</span>
             </label>
         </div>
         
@@ -129,7 +132,6 @@
             </label>
         </div>
 
-        
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
                 {{ form.bevel_laser_head }}
@@ -137,11 +139,28 @@
             </label>
         </div>
         
+        <hr>
         <div class="form-group">
             <label for="{{ form.additional_requirements.id_for_label }}">Additional Requirements</label>
             {{ form.additional_requirements }}
+            <style>
+                #{{ form.additional_requirements.id_for_label }} {
+                    width: 100%;
+                    min-height: 100px;
+                    padding: 8px;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 4px;
+                    resize: vertical;
+                }
+                #{{ form.additional_requirements.id_for_label }}:focus {
+                    border-color: #2563eb;
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+                }
+            </style>
         </div>
 
+        <hr>
         <div class="form-group">
             <label for="{{ form.attachment.id_for_label }}">Attachment</label>
             {% if form.instance.attachment %}
@@ -163,6 +182,7 @@
             </small>
         </div>
 
+        <hr>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary btn-sm">Save</button>
             <button type="button" class="btn btn-secondary btn-sm"><a href="{% url 'quotes' %}">Cancel</a></button>
