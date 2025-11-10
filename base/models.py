@@ -42,9 +42,14 @@ class Quote(models.Model):
     tube_length = models.CharField(max_length=200, blank=True, null=True)  # e.g. "6000 mm"
     tube_diameter = models.CharField(max_length=200, blank=True, null=True)  # e.g. "300 mm"
     length_of_unloading_table = models.CharField(max_length=200, blank=True, null=True)  # e.g. "3000 mm"
-    automatic_loading = models.BooleanField(default=False)
-    semi_automatic_loading = models.BooleanField(default=False)
-    manual_loading = models.BooleanField(default=False)
+
+    LOADING_CHOICES = [
+       ('automatic', 'Automatic'),
+       ('semi_automatic', 'Semi-Automatic'),
+       ('manual', 'Manual'),
+   ]
+    loading_type = models.CharField(max_length=20, choices=LOADING_CHOICES, blank=True)
+    
     two_chucks = models.BooleanField(default=False)
     three_chucks = models.BooleanField(default=False)
 

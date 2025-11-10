@@ -1,0 +1,297 @@
+/* CSS Variables */
+:root {
+    /* Colors */
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-success: #10B981;
+    --color-success-hover: #0d9f70;
+    --color-text: #111827;
+    --color-text-light: #4b5563;
+    --color-border: #e5e7eb;
+    --color-bg: #ffffff;
+    --color-bg-light: #f9fafb;
+    
+    /* Spacing */
+    --spacing-unit: 2px;
+    --spacing-sm: calc(var(--spacing-unit) * 1.5);
+    --spacing-md: calc(var(--spacing-unit) * 2);
+    --spacing-lg: calc(var(--spacing-unit) * 3);
+    --spacing-xl: calc(var(--spacing-unit) * 4);
+    
+    /* Border Radius */
+    --border-radius: 6px;
+    --border-radius-sm: 4px;
+    --border-radius-lg: 8px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Transitions */
+    --transition: all 0.2s ease-in-out;
+}
+
+/* Base Styles */
+body {
+    background-color: #f5f7fa;
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: var(--spacing-xl) auto;
+    background: var(--color-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+/* Card Component */
+.card {
+    background: var(--color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-bg-light);
+}
+
+.card-body {
+    padding: var(--spacing-lg);
+}
+
+/* Form Components */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group.compact {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    font-size: 0.875rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    transition: var(--transition);
+    background-color: var(--color-bg);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.btn--primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn--primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn--danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn--danger:hover {
+    background-color: var(--color-danger-hover);
+}
+
+/* Action Links */
+.action-link {
+    color: var(--color-text-light);
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: all var(--transition);
+    padding: 5px 8px;
+    border-radius: var(--border-radius-sm);
+    display: inline-block;
+}
+
+.action-link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-bg-light);
+}
+
+.action-link.text-danger {
+    color: var(--color-danger);
+}
+
+.action-link.text-danger:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Table Actions */
+.action-cell {
+    padding: var(--spacing-sm) var(--spacing-md) !important;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.btn--success {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.btn--success:hover {
+    background-color: var(--color-success-hover);
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.875rem;
+}
+
+/* Header */
+.form-header {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.form-header h1 {
+    margin: var(--spacing-sm) 0 0;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-text-light);
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-sm);
+    transition: var(--transition);
+}
+
+.back-link:hover {
+    color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .container {
+        margin: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+}
+
+/* Compact Form */
+.compact-form .form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.compact-form .form-row {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Dividers */
+hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--spacing-lg) 0;
+}
+
+/* Select dropdown styling */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+    padding-right: 36px;
+}
+
+/* Textarea styling */
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Utility Classes */
+.mt-1 { margin-top: var(--spacing-unit); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mb-1 { margin-bottom: var(--spacing-unit); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
