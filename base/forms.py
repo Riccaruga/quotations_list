@@ -7,7 +7,10 @@ class QuoteForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'additional_requirements': forms.Textarea(attrs={'rows': 4}),
-            'attachment': forms.FileInput(attrs={'class': 'file-input'})
+            'attachment': forms.FileInput(attrs={
+                'class': 'file-upload-input',
+                'onchange': 'updateFileName(this)'
+            })
         }
         
     def __init__(self, *args, **kwargs):

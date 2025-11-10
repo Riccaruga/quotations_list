@@ -149,20 +149,39 @@
             <label for="{{ form.attachment.id_for_label }}">Attachment</label>
             {% if form.instance.attachment %}
                 <div class="current-file">
-                    <i class="fas fa-paperclip"></i>
-                    <a href="{{ form.instance.attachment.url }}" target="_blank">
+                    <i class="fas fa-paperclip file-icon"></i>
+                    <span class="file-name" title="{{ form.instance.attachment.name }}">
                         {{ form.instance.attachment.name|slice:":30" }}{% if form.instance.attachment.name|length > 30 %}...{% endif %}
-                    </a>
-                    <label class="replace-file">
+                    </span>
+                    <div class="file-actions">
+                        <a href="{{ form.instance.attachment.url }}" target="_blank" class="file-link">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="#" class="file-link remove" onclick="document.getElementById('attachment-clear').checked = true; this.closest('.current-file').style.display = 'none'; document.getElementById('id_attachment').disabled = false; return false;">
+                            <i class="fas fa-times"></i> Remove
+                        </a>
                         {{ form.attachment }}
-                        <span class="replace-text">(Replace)</span>
-                    </label>
+                        <input type="hidden" name="attachment-clear" id="attachment-clear" value="">
+                    </div>
                 </div>
             {% else %}
-                {{ form.attachment }}
+                <div class="file-upload-wrapper">
+                    <label class="file-upload-label">
+                        <i class="fas fa-cloud-upload-alt icon"></i>
+                        <span class="text" id="file-name">Click to upload or drag and drop</span>
+                        <span class="btn btn--primary btn-sm">Choose File</span>
+                        {{ form.attachment }}
+                    </label>
+                </div>
+                <script>
+                function updateFileName(input) {
+                    const fileName = input.files[0] ? input.files[0].name : 'Click to upload or drag and drop';
+                    document.getElementById('file-name').textContent = fileName;
+                }
+                </script>
             {% endif %}
             <small class="form-text text-muted">
-                Upload any relevant files (e.g., drawings, specifications)
+                Upload any relevant files (e.g., drawings, specifications). Max size: 10MB.
             </small>
         </div>
 
@@ -174,37 +193,7 @@
     </form>
 </div>
 <style>
-.file-input {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-}
-
-.current-file {
-    margin: 10px 0;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 4px;
-}
-
-.current-file a {
-    color: #2563eb;
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-.current-file a:hover {
-    text-decoration: underline;
-}
-
-.current-file .replace-file {
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    color: #6c757d;
-}
-
+/* File input styling is now in the main styles.css */
 .current-file .replace-file input[type="file"] {
     position: absolute;
     left: 0;
