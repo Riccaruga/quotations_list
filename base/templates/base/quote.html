@@ -2,18 +2,19 @@
 {% load util_tags %}
 
 {% block content %}
+
 <style>
     .quote-detail-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 25px;
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
         background: #fff;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .header-section {
-        border-bottom: 3px solid #007bff;
-        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 15px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
@@ -22,29 +23,35 @@
     .header-section h2 {
         color: #333;
         margin: 0;
+        font-size: 1.5rem;
     }
     .actions a {
-        padding: 8px 15px;
-        margin-left: 10px;
+        padding: 6px 12px;
+        margin-left: 8px;
         border-radius: 4px;
         text-decoration: none;
-        font-weight: bold;
-        transition: background-color 0.3s;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s;
     }
     .actions .edit-btn {
         background-color: #ffc107;
-        color: #333;
+        color: #212529;
     }
     .actions .delete-btn {
         background-color: #dc3545;
         color: white;
     }
+    .actions a:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
     .status-badge {
         display: inline-block;
-        padding: 5px 10px;
+        padding: 3px 8px;
         border-radius: 4px;
-        font-weight: bold;
-        margin-left: 10px;
+        font-size: 0.85rem;
+        font-weight: 500;
     }
     .status-completed {
         background-color: #28a745;
@@ -52,38 +59,74 @@
     }
     .status-pending {
         background-color: #ffc107;
-        color: #333;
+        color: #212529;
     }
-    .data-group {
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
         margin-bottom: 20px;
-        padding: 15px;
+        font-size: 0.9rem;
+    }
+    .data-table th {
+        text-align: left;
+        padding: 10px 12px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+    }
+    .data-table td {
+        padding: 8px 12px;
         border: 1px solid #e9ecef;
-        border-radius: 6px;
+        vertical-align: top;
     }
-    .data-group h4 {
-        color: #007bff;
-        margin-top: 0;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #007bff;
-        margin-bottom: 15px;
+    .data-table td:first-child {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #495057;
+        width: 200px;
     }
-    .data-item {
-        margin-bottom: 10px;
-        line-height: 1.5;
+    .data-table tr:hover td:first-child {
+        background-color: #e9ecef;
     }
-    .data-item strong {
+    .back-link {
         display: inline-block;
-        min-width: 150px;
-        color: #555;
+        margin-bottom: 15px;
+        color: #0d6efd;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    .section-title {
+        color: #0d6efd;
+        font-size: 1.1rem;
+        margin: 20px 0 10px 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #dee2e6;
     }
     .additional-req {
         white-space: pre-wrap;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    .attachment-link {
+        color: #0d6efd;
+        text-decoration: none;
+    }
+    .attachment-link:hover {
+        text-decoration: underline;
     }
 </style>
 
 <div class="quote-detail-container">
+    <a href="{% url 'quotes' %}" class="back-link">← Back to Quote List</a>
+    
     <div class="header-section">
-        <h2>{{ quote.title|default:"Quote Details" }}</h2>
+        <h2>{{ quote.title|default:"Quote Details" }} <span class="status-badge {% if quote.completed %}status-completed{% else %}status-pending{% endif %}">
+            {{ quote.get_completed_display|default:quote.completed|yesno:"Completed,Pending" }}
+        </span></h2>
         <div class="actions">
             <a href="{% url 'quote-update' quote.id %}" class="edit-btn">
                 <i class="fas fa-edit"></i> Edit
@@ -94,79 +137,74 @@
         </div>
     </div>
 
-    {# --- 1. Core Quote Information --- #}
-    <div class="data-group">
-        <h4>General Information</h4>
-        <div class="data-item">
-            <strong>ID:</strong> {{ quote.id }}
-        </div>
-        <div class="data-item">
-            <strong>Status:</strong> 
-            <span class="status-badge {% if quote.completed %}status-completed{% else %}status-pending{% endif %}">
-                {{ quote.get_completed_display|default:quote.completed|yesno:"Completed,Pending" }}
-            </span>
-        </div>
-        <div class="data-item">
-            <strong>Manager:</strong> {{ quote.manager }}
-        </div>
-        <div class="data-item">
-            <strong>Client:</strong> {{ quote.client }}
-        </div>
-        <div class="data-item">
-            <strong>Machine Type:</strong> {{ quote.get_machine_type_display }}
-        </div>
-        <div class="data-item">
-            <strong>Created By:</strong> {{ quote.user.username }}
-        </div>
-        <div class="data-item">
-            <strong>Date:</strong> {{ quote.created_at|date:"d M Y (H:i)" }}
-        </div>
-    </div>
+    <h3 class="section-title">General Information</h3>
+    <table class="data-table">
+        <tr>
+            <td><strong>ID</strong></td>
+            <td colspan="3">{{ quote.id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Client</strong></td>
+            <td colspan="3">{{ quote.client|default:"-" }}</td>
+        </tr>
+        <tr>
+            <td><strong>Manager</strong></td>
+            <td colspan="3">{{ quote.manager|default:"-" }}</td>
+        </tr>
+        <tr>
+            <td><strong>Machine Type</strong></td>
+            <td colspan="3">{{ quote.get_machine_type_display|default:"-" }}</td>
+        </tr>
+        <tr>
+            <td><strong>Created By</strong></td>
+            <td colspan="3">{{ quote.user.username|default:"-" }}</td>
+        </tr>
+        <tr>
+            <td><strong>Date</strong></td>
+            <td colspan="3">{{ quote.created_at|date:"d M Y (H:i)" }}</td>
+        </tr>
+    </table>
 
-    {# --- 2. Dynamic Specification Information --- #}
-   {% if spec %}
-        <div class="data-group">
-            <h4>Specifications for {{ quote.get_machine_type_display }}</h4>
-            
-            {# Loop through the list of field objects provided by the view #}
-            {% for field in spec_fields %} 
-                <div class="data-item">
-                    <strong>{{ field.verbose_name|capfirst }}:</strong> 
-                    
-                    {# Use field.name to access the value on the 'spec' object #}
-                    {% with value=spec|get_attribute:field.name %}
-                        
-                        {% if field.get_internal_type == 'BooleanField' %}
-                            {{ value|yesno:"Yes,No" }}
-                        {% elif field.choices %}
-                            {# Requires the spec object and field name to resolve choices #}
-                            {{ spec|get_attribute_display:field.name }}
-                        {% else %}
-                            {{ value|default:"N/A" }}
-                        {% endif %}
-                    {% endwith %}
-                </div>
+    {% if spec %}
+        <h3 class="section-title">Specifications for {{ quote.get_machine_type_display }}</h3>
+        <table class="data-table">
+            {% for field in spec_fields %}
+                <tr>
+                    <td><strong>{{ field.verbose_name|capfirst }}</strong></td>
+                    <td>
+                        {% with value=spec|get_attribute:field.name %}
+                            {% if field.get_internal_type == 'BooleanField' %}
+                                {{ value|yesno:"Yes,No" }}
+                            {% elif field.choices %}
+                                {{ spec|get_attribute_display:field.name|default:"-" }}
+                            {% else %}
+                                {{ value|default:"-" }}
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                </tr>
             {% endfor %}
-            
+        </table>
+    {% endif %}
+
+    {% if quote.additional_requirements %}
+        <h3 class="section-title">Additional Requirements</h3>
+        <div class="additional-req" style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; border: 1px solid #e9ecef; margin-bottom: 20px;">
+            {{ quote.additional_requirements|linebreaksbr }}
         </div>
     {% endif %}
 
-    {# --- 3. Additional Requirements and Attachment --- #}
-    <div class="data-group">
-        <h4>Additional Details</h4>
-        <div class="data-item">
-            <strong>Attachment:</strong> 
-            {% if quote.attachment %}
-                <a href="{{ quote.attachment.url }}" target="_blank">View Attached File ({{ quote.attachment.name|default:"File" }})</a>
-            {% else %}
-                No file attached.
-            {% endif %}
-        </div>
-        <div class="data-item">
-            <strong>Requirements:</strong> 
-            <span class="additional-req">{{ quote.additional_requirements|default:"None provided." }}</span>
-        </div>
+    <h3 class="section-title">Attachment</h3>
+    <div style="margin-bottom: 20px;">
+        {% if quote.attachment %}
+            <a href="{{ quote.attachment.url }}" target="_blank" class="attachment-link">
+                <i class="fas fa-paperclip"></i> {{ quote.attachment.name|default:"View Attachment" }}
+            </a>
+        {% else %}
+            No file attached
+        {% endif %}
     </div>
+
 </div>
 
 {% endblock %}

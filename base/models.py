@@ -1,5 +1,3 @@
-# base/models.py
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -35,6 +33,7 @@ class Quote(models.Model):
     def get_spec_model(self):
         """Returns the related specification object based on machine_type."""
         if self.machine_type == 'laser_cutting':
+            # Note: This relies on the default related name (model_name.lower())
             return self.lasercuttingspec
         elif self.machine_type == 'press_brake':
             return self.pressbrakespec
@@ -88,8 +87,8 @@ class TubeLaserSpec(models.Model):
        ('automatic', 'Automatic'),
        ('semi_automatic', 'Semi-Automatic'),
        ('manual', 'Manual'),
-   ]
-    loading_type = models.CharField(max_length=20, choices=LOADING_CHOICES, blank=True, null=True) # Added null=True
+    ]
+    loading_type = models.CharField(max_length=20, choices=LOADING_CHOICES, blank=True, null=True)
     
     two_chucks = models.BooleanField(default=False)
     three_chucks = models.BooleanField(default=False)
