@@ -1,251 +1,172 @@
 {% extends 'base/main.html' %}
+{% load util_tags %}
 
 {% block content %}
+<style>
+    .quote-detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 25px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .header-section {
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header-section h2 {
+        color: #333;
+        margin: 0;
+    }
+    .actions a {
+        padding: 8px 15px;
+        margin-left: 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    .actions .edit-btn {
+        background-color: #ffc107;
+        color: #333;
+    }
+    .actions .delete-btn {
+        background-color: #dc3545;
+        color: white;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .status-completed {
+        background-color: #28a745;
+        color: white;
+    }
+    .status-pending {
+        background-color: #ffc107;
+        color: #333;
+    }
+    .data-group {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+    }
+    .data-group h4 {
+        color: #007bff;
+        margin-top: 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #007bff;
+        margin-bottom: 15px;
+    }
+    .data-item {
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+    .data-item strong {
+        display: inline-block;
+        min-width: 150px;
+        color: #555;
+    }
+    .additional-req {
+        white-space: pre-wrap;
+    }
+</style>
 
-<div class="form-header">
-    <a href="{% url 'quotes' %}" class="back-link">← Back to Quotes</a>
-    <h1>Quote Request #{{ quote.id }}</h1>
-</div>
-
-<div class="quote-details">
-    <table class="quote-table">
-        <tr>
-            <th>Manager:</th>
-            <td>{{ quote.manager }}</td>
-        </tr>
-        <tr>
-            <th>Client:</th>
-            <td>{{ quote.client }}</td>
-        </tr>
-        <tr>
-            <th>Machine Type:</th>
-            <td>{{ quote.get_machine_type_display }}</td>
-        </tr>
-        
-        {% if quote.machine_type == 'laser_cutting' %}
-            <tr>
-                <th>Working Area:</th>
-                <td>{{ quote.working_area|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Laser Source Power:</th>
-                <td>{{ quote.laser_source_power|default:"-" }}</td>
-            </tr>
-            {% if quote.compressor %}
-            <tr>
-                <th>Compressor:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-            {% if quote.stabilizer %}
-            <tr>
-                <th>Stabilizer:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-            {% if quote.bevel_laser_head %}
-            <tr>
-                <th>Bevel Laser Head:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-
-        {% elif quote.machine_type == 'press_brake' %}
-            <tr>
-                <th>Bending Capacity:</th>
-                <td>{{ quote.bending_capacity|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Working Length:</th>
-                <td>{{ quote.working_length|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>CNC Type:</th>
-                <td>{{ quote.get_CNC_type_display|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Axis Type:</th>
-                <td>{{ quote.get_axis_type_display|default:"-" }}</td>
-            </tr>
-
-        {% elif quote.machine_type == 'tube_laser' %}
-            <tr>
-                <th>Tube Length:</th>
-                <td>{{ quote.tube_length|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Tube Diameter:</th>
-                <td>{{ quote.tube_diameter|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Length of Unloading Table:</th>
-                <td>{{ quote.length_of_unloading_table|default:"-" }}</td>
-            </tr>
-            {% if quote.automatic_loading %}
-            <tr>
-                <th>Automatic Loading:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-            {% if quote.semi_automatic_loading %}
-            <tr>
-                <th>Semi-automatic Loading:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-            {% if quote.manual_loading %}
-            <tr>
-                <th>Manual Loading:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-            {% if quote.two_chucks %}
-            <tr>
-                <th>Two Chucks:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-            {% if quote.three_chucks %}
-            <tr>
-                <th>Three Chucks:</th>
-                <td>Yes</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if quote.additional_requirements %}
-            <tr class="additional-requirements">
-                <th>Additional Requirements:</th>
-                <td>{{ quote.additional_requirements }}</td>
-            </tr>
-        {% endif %}
-        <tr>
-            <th>Request text:</th>
-            <td>{% if quote.request_text %}{{ quote.request_text }}{% else %}Please send a quotation for {{ quote.get_machine_type_display }}{% endif %}</td>
-        </tr>
-        
-        {% if quote.attachment %}
-        <tr>
-            <th>Attachment:</th>
-            <td>
-                {% if quote.attachment and quote.attachment.url %}
-                    <a href="{{ quote.attachment.url }}" target="_blank" class="attachment-link">
-                        <i class="fas fa-paperclip"></i>
-                        {{ quote.attachment.name|slice:":30" }}{% if quote.attachment.name|length > 30 %}...{% endif %}
-                    </a>
-                {% else %}
-                    <span class="text-muted">No file attached or file not found</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endif %}
-
-    </table>
-
-    <div class="timestamp">
-        <span class="timestamp-label">Created:</span>
-        <span class="timestamp-value">{{ quote.created_at|date:"d M Y, H:i" }}</span>
+<div class="quote-detail-container">
+    <div class="header-section">
+        <h2>{{ quote.title|default:"Quote Details" }}</h2>
+        <div class="actions">
+            <a href="{% url 'quote-update' quote.id %}" class="edit-btn">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'quote-delete' quote.id %}" class="delete-btn">
+                <i class="fas fa-trash-alt"></i> Delete
+            </a>
+        </div>
     </div>
 
+    {# --- 1. Core Quote Information --- #}
+    <div class="data-group">
+        <h4>General Information</h4>
+        <div class="data-item">
+            <strong>ID:</strong> {{ quote.id }}
+        </div>
+        <div class="data-item">
+            <strong>Status:</strong> 
+            <span class="status-badge {% if quote.completed %}status-completed{% else %}status-pending{% endif %}">
+                {{ quote.get_completed_display|default:quote.completed|yesno:"Completed,Pending" }}
+            </span>
+        </div>
+        <div class="data-item">
+            <strong>Manager:</strong> {{ quote.manager }}
+        </div>
+        <div class="data-item">
+            <strong>Client:</strong> {{ quote.client }}
+        </div>
+        <div class="data-item">
+            <strong>Machine Type:</strong> {{ quote.get_machine_type_display }}
+        </div>
+        <div class="data-item">
+            <strong>Created By:</strong> {{ quote.user.username }}
+        </div>
+        <div class="data-item">
+            <strong>Date:</strong> {{ quote.created_at|date:"d M Y (H:i)" }}
+        </div>
+    </div>
+
+    {# --- 2. Dynamic Specification Information --- #}
+   {% if spec %}
+        <div class="data-group">
+            <h4>Specifications for {{ quote.get_machine_type_display }}</h4>
+            
+            {# Loop through the list of field objects provided by the view #}
+            {% for field in spec_fields %} 
+                <div class="data-item">
+                    <strong>{{ field.verbose_name|capfirst }}:</strong> 
+                    
+                    {# Use field.name to access the value on the 'spec' object #}
+                    {% with value=spec|get_attribute:field.name %}
+                        
+                        {% if field.get_internal_type == 'BooleanField' %}
+                            {{ value|yesno:"Yes,No" }}
+                        {% elif field.choices %}
+                            {# Requires the spec object and field name to resolve choices #}
+                            {{ spec|get_attribute_display:field.name }}
+                        {% else %}
+                            {{ value|default:"N/A" }}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            {% endfor %}
+            
+        </div>
+    {% endif %}
+
+    {# --- 3. Additional Requirements and Attachment --- #}
+    <div class="data-group">
+        <h4>Additional Details</h4>
+        <div class="data-item">
+            <strong>Attachment:</strong> 
+            {% if quote.attachment %}
+                <a href="{{ quote.attachment.url }}" target="_blank">View Attached File ({{ quote.attachment.name|default:"File" }})</a>
+            {% else %}
+                No file attached.
+            {% endif %}
+        </div>
+        <div class="data-item">
+            <strong>Requirements:</strong> 
+            <span class="additional-req">{{ quote.additional_requirements|default:"None provided." }}</span>
+        </div>
+    </div>
 </div>
-
-<style>
-.quote-details {
-    margin: 20px 0;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-.quote-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.quote-table th, 
-.quote-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #eaeaea;
-}
-
-.quote-table th {
-    width: 25%;
-    font-weight: 500;
-    color: #555;
-    background-color: #f9f9f9;
-}
-
-.quote-table tr:last-child td {
-    border-bottom: none;
-}
-
-.quote-table tr:hover {
-    background-color: #f5f5f5;
-}
-
-.additional-requirements td {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-.attachment-link {
-    display: inline-flex;
-    align-items: center;
-    color: #2563eb;
-    text-decoration: none;
-    padding: 6px 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 4px;
-    background-color: #f8fafc;
-    transition: all 0.2s;
-}
-
-.attachment-link:hover {
-    background-color: #f1f5f9;
-    border-color: #cbd5e1;
-}
-
-.attachment-link i {
-    margin-right: 8px;
-    color: #64748b;
-}
-
-.timestamp {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    font-size: 0.9em;
-    color: #6c757d;
-}
-
-.timestamp-label {
-    font-weight: 500;
-    margin-right: 8px;
-}
-
-.timestamp-value {
-    font-family: monospace;
-}
-
-/* Responsive table */
-@media (max-width: 768px) {
-    .quote-table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    .quote-table th,
-    .quote-table td {
-        padding: 10px 12px;
-    }
-    
-    .quote-table th {
-        width: 50%;
-    }
-}
-</style>
 
 {% endblock %}
