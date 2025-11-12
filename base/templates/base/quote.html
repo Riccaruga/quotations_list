@@ -143,22 +143,30 @@
             <td><strong>ID</strong></td>
             <td colspan="3">{{ quote.id }}</td>
         </tr>
-        <tr>
-            <td><strong>Client</strong></td>
-            <td colspan="3">{{ quote.client|default:"-" }}</td>
-        </tr>
+        {% if quote.manager %}
         <tr>
             <td><strong>Manager</strong></td>
-            <td colspan="3">{{ quote.manager|default:"-" }}</td>
+            <td colspan="3">{{ quote.manager }}</td>
         </tr>
+        {% endif %}
+        {% if quote.client %}
+        <tr>
+            <td><strong>Client</strong></td>
+            <td colspan="3">{{ quote.client }}</td>
+        </tr>
+        {% endif %}
+        {% if quote.machine_type %}
         <tr>
             <td><strong>Machine Type</strong></td>
-            <td colspan="3">{{ quote.get_machine_type_display|default:"-" }}</td>
+            <td colspan="3">{{ quote.get_machine_type_display }}</td>
         </tr>
+        {% endif %}
+        {% if quote.user %}
         <tr>
             <td><strong>Created By</strong></td>
-            <td colspan="3">{{ quote.user.username|default:"-" }}</td>
+            <td colspan="3">{{ quote.user.username }}</td>
         </tr>
+        {% endif %}
         <tr>
             <td><strong>Date</strong></td>
             <td colspan="3">{{ quote.created_at|date:"d M Y (H:i)" }}</td>
@@ -169,20 +177,22 @@
         <h3 class="section-title">Specifications for {{ quote.get_machine_type_display }}</h3>
         <table class="data-table">
             {% for field in spec_fields %}
-                <tr>
-                    <td><strong>{{ field.verbose_name|capfirst }}</strong></td>
-                    <td>
-                        {% with value=spec|get_attribute:field.name %}
-                            {% if field.get_internal_type == 'BooleanField' %}
-                                {{ value|yesno:"Yes,No" }}
-                            {% elif field.choices %}
-                                {{ spec|get_attribute_display:field.name|default:"-" }}
-                            {% else %}
-                                {{ value|default:"-" }}
-                            {% endif %}
-                        {% endwith %}
-                    </td>
-                </tr>
+                {% with value=spec|get_attribute:field.name %}
+                    {% if value != None and value != '' and value != False %}
+                        <tr>
+                            <td><strong>{{ field.verbose_name|capfirst }}</strong></td>
+                            <td>
+                                {% if field.get_internal_type == 'BooleanField' %}
+                                    {{ value|yesno:"Yes,No" }}
+                                {% elif field.choices %}
+                                    {{ spec|get_attribute_display:field.name }}
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endwith %}
             {% endfor %}
         </table>
     {% endif %}
