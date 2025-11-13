@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'quotations_list.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'quotations_db',           # Database name
+        'USER': 'postgres',                # Default superuser
+        'PASSWORD': '1',                   # Your PostgreSQL password
+        'HOST': 'localhost',               # Use 'localhost' if PostgreSQL is running on the same machine
+        'PORT': '5432',                    # Default PostgreSQL port
     }
 }
 
