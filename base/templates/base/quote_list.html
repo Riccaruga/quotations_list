@@ -180,7 +180,7 @@ th {
   {% for quote in quotes %}
   <tr class="{% if quote.completed %}row-completed{% else %}row-pending{% endif %}">
     <td>{{ quote.id }}</td>
-    <td>{{ quote.created_at|date:"d-m-Y H:i" }}</td>
+    <td>{{ quote.created_at|date:"d-m-Y" }}<br>{{ quote.created_at|time:"H:i" }}</td>
     <td style="text-align: center;">
         <form method="post" action="{% url 'quote-toggle-complete' quote.id %}" class="toggle-form" style="display: inline-block; margin: 0;">
             {% csrf_token %}
