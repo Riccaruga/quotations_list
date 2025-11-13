@@ -1,0 +1,26 @@
+.container {
+    max-width: 500px;    
+}
+
+.status-completed {
+    color: #10B981;  /* Green */
+    font-weight: bold;
+}
+
+.status-pending {
+    color: #EF4444;  /* Red */
+    font-weight: bold;
+}
+
+.row-pending {
+    background-color: #FFF7ED;  /* Very light orange */
+    border-left: 4px solid #F97316;  /* Orange accent */
+}
+
+.row-completed:hover {
+    background-color: #DCFCE7;  /* Slightly darker green on hover */
+}
+
+.row-pending:hover {
+    background-color: #FFEDD5;  /* Slightly darker orange on hover */
+}
