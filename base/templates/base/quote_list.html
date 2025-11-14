@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="auth-section">
+        <div>
             {% if request.user.is_authenticated %}
-                <span class="me-3">Welcome, <strong>{{ request.user }}</strong></span>
+                <span class="me-2">Welcome, <strong>{{ request.user }}</strong></span>
                 <form action="{% url 'logout' %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-outline-secondary">Logout</button>
@@ -20,23 +20,23 @@
 
     <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group" role="group">
-            <a href="?status=all" class="btn btn-outline-secondary {% if current_status == 'all' %}active{% endif %}">
+            <a href="?status=all" class="btn btn-secondary {% if current_status == 'all' %}active{% endif %}">
                 All
             </a>
-            <a href="?status=pending" class="btn btn-outline-warning {% if current_status == 'pending' %}active{% endif %}">
+            <a href="?status=pending" class="btn btn-warning {% if current_status == 'pending' %}active{% endif %}">
                 Pending
             </a>
-            <a href="?status=completed" class="btn btn-outline-success {% if current_status == 'completed' %}active{% endif %}">
+            <a href="?status=completed" class="btn btn-success {% if current_status == 'completed' %}active{% endif %}">
                 Completed
             </a>
         </div>
         <a href="{% url 'quote-create' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> New Quote
+            New Quote
         </a>
     </div>
 
 <div class="table-responsive">
-    <table class="table table-hover align-middle table-bordered table-sm ">
+    <table class="table table-hover align-middle table-bordered table-sm">
         <thead class="table-light">
             <tr>
                 <th class="text-center">ID</th>
@@ -52,7 +52,7 @@
         <tbody>
   {% for quote in quotes %}
   <tr class="{% if quote.completed %}completed{% else %}pending{% endif %}">
-    <td class="fw-bold" style="text-align: center;">{{ quote.id }}</td>
+    <td style="text-align: center;">{{ quote.id }}</td>
     <td style="text-align: center;">
         <div class="d-flex flex-column">
             <span>{{ quote.created_at|date:"d-m-Y" }}</span>
@@ -105,6 +105,6 @@
         </tbody>
     </table>
 </div>
-</div>  <!-- Close container div -->
+</div>
 
 {% endblock %}

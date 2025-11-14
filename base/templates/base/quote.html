@@ -3,144 +3,30 @@
 
 {% block content %}
 
-<style>
-    .quote-detail-container {
-        max-width: 1000px;
-        margin: 20px auto;
-        padding: 20px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .header-section {
-        border-bottom: 2px solid #e9ecef;
-        padding-bottom: 15px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .header-section h2 {
-        color: #333;
-        margin: 0;
-        font-size: 1.5rem;
-    }
-    .actions a {
-        padding: 6px 12px;
-        margin-left: 8px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-    }
-    .actions .edit-btn {
-        background-color: #ffc107;
-        color: #212529;
-    }
-    .actions .delete-btn {
-        background-color: #dc3545;
-        color: white;
-    }
-    .actions a:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
-    }
-    .status-badge {
-        display: inline-block;
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-size: 0.85rem;
-        font-weight: 500;
-    }
-    .status-completed {
-        background-color: #28a745;
-        color: white;
-    }
-    .status-pending {
-        background-color: #ffc107;
-        color: #212529;
-    }
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        font-size: 0.9rem;
-    }
-    .data-table th {
-        text-align: left;
-        padding: 10px 12px;
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        font-weight: 600;
-        color: #495057;
-    }
-    .data-table td {
-        padding: 8px 12px;
-        border: 1px solid #e9ecef;
-        vertical-align: top;
-    }
-    .data-table td:first-child {
-        background-color: #f8f9fa;
-        font-weight: 600;
-        color: #495057;
-        width: 200px;
-    }
-    .data-table tr:hover td:first-child {
-        background-color: #e9ecef;
-    }
-    .back-link {
-        display: inline-block;
-        margin-bottom: 15px;
-        color: #0d6efd;
-        text-decoration: none;
-        font-weight: 500;
-    }
-    .back-link:hover {
-        text-decoration: underline;
-    }
-    .section-title {
-        color: #0d6efd;
-        font-size: 1.1rem;
-        margin: 20px 0 10px 0;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .additional-req {
-        white-space: pre-wrap;
-        font-size: 0.9rem;
-        line-height: 1.4;
-    }
-    .attachment-link {
-        color: #0d6efd;
-        text-decoration: none;
-    }
-    .attachment-link:hover {
-        text-decoration: underline;
-    }
-</style>
-
-<div class="quote-detail-container">
-    <a href="{% url 'quotes' %}" class="back-link">← Back to Quote List</a>
+<div class="container">
+    <a href="{% url 'quotes' %}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+    style="margin-bottom: 1.5rem; display: inline-block;">← Back to Quote List</a>
     
-    <div class="header-section">
-        <h2>{{ quote.title|default:"Quote Details" }} <span class="status-badge {% if quote.completed %}status-completed{% else %}status-pending{% endif %}">
+    <div class="mb-3">
+        <h2 style="margin-bottom: 1.5rem;">{{ quote.title|default:"Quote Details" }} 
+            <span class="btn {% if quote.completed %}btn-success status-completed btn-sm{% else %}btn-warning status-pending btn-sm{% endif %}">
             {{ quote.get_completed_display|default:quote.completed|yesno:"Completed,Pending" }}
         </span></h2>
-        <div class="actions">
-            <a href="{% url 'quote-update' quote.id %}" class="edit-btn">
+        <div class="btn-group" role="group">
+            <a href="{% url 'quote-update' quote.id %}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit
             </a>
-            <a href="{% url 'quote-delete' quote.id %}" class="delete-btn">
+            <a href="{% url 'quote-delete' quote.id %}" class="btn btn-danger">
                 <i class="fas fa-trash-alt"></i> Delete
             </a>
         </div>
     </div>
 
-    <h3 class="section-title">General Information</h3>
-    <table class="data-table">
+    <h3 class="mb-1">General Information</h3>
+    <hr class="mt-1 mb-3 border-2">
+    <table class="table table-hover align-middle table-bordered table-sm">
         <tr>
-            <td><strong>ID</strong></td>
+            <td style="width: 200px"><strong>ID</strong></td>
             <td colspan="3">{{ quote.id }}</td>
         </tr>
         {% if quote.manager %}
@@ -174,13 +60,14 @@
     </table>
 
     {% if spec %}
-        <h3 class="section-title">Specifications for {{ quote.get_machine_type_display }}</h3>
-        <table class="data-table">
+        <h3 class="mb-1">Specifications for {{ quote.get_machine_type_display }}</h3>
+        <hr class="mt-1 mb-3 border-2">
+        <table class="table table-hover align-middle table-bordered table-sm">
             {% for field in spec_fields %}
                 {% with value=spec|get_attribute:field.name %}
                     {% if value != None and value != '' and value != False %}
                         <tr>
-                            <td><strong>{{ field.verbose_name|capfirst }}</strong></td>
+                            <td style="width: 200px"><strong>{{ field.verbose_name|capfirst }}</strong></td>
                             <td>
                                 {% if field.get_internal_type == 'BooleanField' %}
                                     {{ value|yesno:"Yes,No" }}
@@ -198,17 +85,21 @@
     {% endif %}
 
     {% if quote.additional_requirements %}
-        <h3 class="section-title">Additional Requirements</h3>
-        <div class="additional-req" style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; border: 1px solid #e9ecef; margin-bottom: 20px;">
+        <h3 class="mb-1">Additional Requirements</h3>
+        <hr class="mt-1 mb-0 border-2">
+        <div class="mb-2">
             {{ quote.additional_requirements|linebreaksbr }}
         </div>
     {% endif %}
 
-    <h3 class="section-title">Attachment</h3>
-    <div style="margin-bottom: 20px;">
+    <h3 class="mb-1">Attachment</h3>
+    <hr class="mt-1 mb-0 border-2">
+    <div>
         {% if quote.attachment %}
             <a href="{{ quote.attachment.url }}" target="_blank" class="attachment-link">
-                <i class="fas fa-paperclip"></i> {{ quote.attachment.name|default:"View Attachment" }}
+                <ul class="list-group">
+                    <li class="list-group-item">{{ quote.attachment.name|default:"View Attachment" }}</li>
+                </ul>
             </a>
         {% else %}
             No file attached
