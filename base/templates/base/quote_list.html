@@ -18,21 +18,41 @@
     
     <h2 class="mb-4" style="text-align: center;">Quotation List</h2>
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="status-filter-group" role="group">
-            <a href="?status=all" class="status-filter-btn {% if current_status == 'all' or not current_status %}active{% endif %}" data-status="all">
+            <a href="?status=all{% if search_query %}&search={{ search_query|urlencode }}{% endif %}" class="status-filter-btn {% if current_status == 'all' or not current_status %}active{% endif %}" data-status="all">
                 <span class="button-top">All</span>
             </a>
-            <a href="?status=pending" class="status-filter-btn {% if current_status == 'pending' %}active{% endif %}" data-status="pending">
+            <a href="?status=pending{% if search_query %}&search={{ search_query|urlencode }}{% endif %}" class="status-filter-btn {% if current_status == 'pending' %}active{% endif %}" data-status="pending">
                 <span class="button-top">Pending</span>
             </a>
-            <a href="?status=completed" class="status-filter-btn {% if current_status == 'completed' %}active{% endif %}" data-status="completed">
+            <a href="?status=completed{% if search_query %}&search={{ search_query|urlencode }}{% endif %}" class="status-filter-btn {% if current_status == 'completed' %}active{% endif %}" data-status="completed">
                 <span class="button-top">Completed</span>
             </a>
+            <form method="get" class="search-form me-3">
+                <div class="search-group">
+                    <input type="text" 
+                           name="search" 
+                           value="{{ search_query }}" 
+                           class="search-input" 
+                           placeholder="Search by manager or client...">
+                    {% if search_query %}
+                        <a href="?status={{ current_status }}" class="search-clear">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    {% endif %}
+                    <button class="search-submit" type="submit">
+                        <i class="bi bi-search me-1"></i>
+                        <span>Search</span>
+                    </button>
+                </div>
+            </form>
         </div>
-        <a href="{% url 'quote-create' %}" class="action-button" data-action="new">
-            <span class="button-top">New Quote</span>
-        </a>
+        <div class="d-flex align-items-center">
+            <a href="{% url 'quote-create' %}" class="action-button" data-action="new">
+                <span class="button-top">New Quote</span>
+            </a>
+        </div>
     </div>
 
 <div class="table-responsive">
