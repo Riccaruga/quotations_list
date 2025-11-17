@@ -19,19 +19,19 @@
     <h2 class="mb-4" style="text-align: center;">Quotation List</h2>
 
     <div class="d-flex justify-content-between align-items-center">
-        <div class="btn-group" role="group">
-            <a href="?status=all" class="btn btn-secondary"{% if current_status == 'all' %}active{% endif %}>
-                All
+        <div class="status-filter-group" role="group">
+            <a href="?status=all" class="status-filter-btn {% if current_status == 'all' or not current_status %}active{% endif %}" data-status="all">
+                <span class="button-top">All</span>
             </a>
-            <a href="?status=pending" class="btn btn-warning {% if current_status == 'pending' %}active{% endif %}">
-                Pending
+            <a href="?status=pending" class="status-filter-btn {% if current_status == 'pending' %}active{% endif %}" data-status="pending">
+                <span class="button-top">Pending</span>
             </a>
-            <a href="?status=completed" class="btn btn-success {% if current_status == 'completed' %}active{% endif %}">
-                Completed
+            <a href="?status=completed" class="status-filter-btn {% if current_status == 'completed' %}active{% endif %}" data-status="completed">
+                <span class="button-top">Completed</span>
             </a>
         </div>
-        <a href="{% url 'quote-create' %}" class="btn btn-primary">
-            New Quote
+        <a href="{% url 'quote-create' %}" class="action-button" data-action="new">
+            <span class="button-top">New Quote</span>
         </a>
     </div>
 
@@ -39,20 +39,20 @@
     <table class="table table-hover align-middle table-bordered table-sm">
         <thead class="table-light">
             <tr>
-                <th class="text-center">ID</th>
-                <th class="text-center" style="width: 100px;">Created</th>
-                <th class="text-center" style="width: 100px;">Completed</th>
-                <th class="text-center">Title</th>
-                <th class="text-center">Manager</th>
-                <th class="text-center">Client</th>
-                <th class="text-center">Machine Type</th>
+                <th>ID</th>
+                <th style="width: 95px;">Created</th>
+                <th style="width: 70px;">Completed</th>
+                <th>Title</th>
+                <th style="width: 80px;">Manager</th>
+                <th>Client</th>
+                <th style="width: 130px;">Machine Type</th>
                 <th colspan="3" class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
   {% for quote in quotes %}
   <tr class="{% if quote.completed %}completed{% else %}pending{% endif %}">
-    <td style="text-align: center;">{{ quote.id }}</td>
+    <td style="text-align: left;">{{ quote.id }}</td>
     <td style="text-align: center;">
         <div class="d-flex flex-column">
             <span>{{ quote.created_at|date:"d-m-Y" }}</span>
@@ -69,7 +69,7 @@
             </div>
         </form>
     </td>
-    <td>{{ quote.title }}</td>
+    <td class="title-cell">{{ quote.title }}</td>
     <td>{{ quote.manager }}</td>
     <td>{{ quote.client }}</td>
     <td>

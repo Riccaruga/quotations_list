@@ -14,9 +14,9 @@ class Quote(models.Model):
 
     # Machine Type Selector
     MACHINE_CHOICES = [
-        ('laser_cutting', 'Laser Cutting Machine'),
+        ('laser_cutting', 'Laser Cutting'),
         ('press_brake', 'Press Brake'), 
-        ('tube_laser', 'Tube Laser Cutting Machine'),
+        ('tube_laser', 'Tube Laser Cutting'),
     ]
     machine_type = models.CharField(max_length=50, choices=MACHINE_CHOICES)
 
