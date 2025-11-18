@@ -11,7 +11,7 @@ import os
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import transaction
+from django.db import transaction, models
 
 # --- Utility Mapping ---
 SPEC_FORM_MAP = {
@@ -40,17 +40,27 @@ class QuoteList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         status = self.request.GET.get('status', 'all')
+        search_query = self.request.GET.get('search', '').strip()
         
+        # Apply status filter
         if status == 'pending':
-            return queryset.filter(completed=False).order_by('-created_at')
+            queryset = queryset.filter(completed=False)
         elif status == 'completed':
-            return queryset.filter(completed=True).order_by('-created_at')
-        else:
-            return queryset.order_by('-created_at')
+            queryset = queryset.filter(completed=True)
+            
+        # Apply search filter if search query exists
+        if search_query:
+            queryset = queryset.filter(
+                models.Q(manager__icontains=search_query) | 
+                models.Q(client__icontains=search_query)
+            )
+            
+        return queryset.order_by('-created_at')
             
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_status'] = self.request.GET.get('status', 'all')
+        context['search_query'] = self.request.GET.get('search', '')
         return context
 
 # --- Detail View (Already fixed) ---
