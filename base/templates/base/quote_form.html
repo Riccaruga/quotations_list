@@ -16,146 +16,128 @@
         <h2 style="text-align: center;">{% if form.instance.pk %}Update Quote{% else %}Create New Quote{% endif %}</h2>
     </div>
     
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
     {% csrf_token %}
     
         {# --- 1. Main Quote Form Fields (Explicit Rendering for safety) --- #}
-        <div class="row mb-3">
-            <label for="{{ form.title.id_for_label }}" class="col-sm-2 col-form-label">{{ form.title.label }}</label>
-            <div class="col">
-                <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value|default:'' }}" placeholder="Enter a title">
-                {% if form.title.errors %}<ul class="errorlist">{{ form.title.errors }}</ul>{% endif %}
+        <div class="form-group">
+            <div class="coolinput">
+                <label for="{{ form.title.id_for_label }}" class="text">{{ form.title.label }}</label>
+                <input type="text" class="input" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value|default:'' }}" placeholder=" " required>
+                {% if form.title.errors %}<div class="invalid-feedback">{{ form.title.errors }}</div>{% endif %}
             </div>
         </div>
         
-        <div class="row mb-3">
-            <label for="{{ form.manager.id_for_label }}" class="col-sm-2 col-form-label">{{ form.manager.label }}</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="{{ form.manager.id_for_label }}" name="{{ form.manager.name }}" value="{{ form.manager.value|default:'' }}" placeholder="Enter a manager">
-                {% if form.manager.errors %}<ul class="errorlist">{{ form.manager.errors }}</ul>{% endif %}
+        <div class="form-group">
+            <div class="coolinput">
+                <label for="{{ form.manager.id_for_label }}" class="text">{{ form.manager.label }}</label>
+                <input type="text" class="input" id="{{ form.manager.id_for_label }}" name="{{ form.manager.name }}" value="{{ form.manager.value|default:'' }}" placeholder=" " required>
+                {% if form.manager.errors %}<div class="invalid-feedback">{{ form.manager.errors }}</div>{% endif %}
             </div>
         </div>
         
-        <div class="row mb-3">
-            <label for="{{ form.client.id_for_label }}" class="col-sm-2 col-form-label">{{ form.client.label }}</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="{{ form.client.id_for_label }}" name="{{ form.client.name }}" value="{{ form.client.value|default:'' }}" placeholder="Enter a client">
-                {% if form.client.errors %}<ul class="errorlist">{{ form.client.errors }}</ul>{% endif %}
+        <div class="form-group">
+            <div class="coolinput">
+                <label for="{{ form.client.id_for_label }}" class="text">{{ form.client.label }}</label>
+                <input type="text" class="input" id="{{ form.client.id_for_label }}" name="{{ form.client.name }}" value="{{ form.client.value|default:'' }}" placeholder=" " required>
+                {% if form.client.errors %}<div class="invalid-feedback">{{ form.client.errors }}</div>{% endif %}
             </div>
         </div>
 
         {# --- 2. Machine Type Selector (Crucial for dynamic behavior) --- #}
-        <div class="row mb-3">
-            <label for="{{ form.machine_type.id_for_label }}" class="col-sm-2 col-form-label">{{ form.machine_type.label }}</label>
-            <div class="col-sm-10">
-                <select class="form-select" id="{{ form.machine_type.id_for_label }}" name="{{ form.machine_type.name }}" {% if form.instance.pk %}disabled{% endif %}>
+        <div class="form-group">
+            <div class="coolinput">
+                <label for="{{ form.machine_type.id_for_label }}" class="text">{{ form.machine_type.label }}</label>
+                <select class="input" id="{{ form.machine_type.id_for_label }}" name="{{ form.machine_type.name }}" {% if form.instance.pk %}disabled{% endif %} required>
                     <option value="">Select a machine type</option>
                     {% for value, label in form.machine_type.field.choices %}
                         {% if value %}
-                        <option value="{{ value }}" {% if form.machine_type.value == value %}selected{% endif %}>{{ label }}</option>
+                        <option value="{{ value }}" {% if form.machine_type.value == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
                         {% endif %}
                     {% endfor %}
                 </select>
                 {% if form.instance.pk %}
                 <input type="hidden" name="{{ form.machine_type.name }}" value="{{ form.machine_type.value }}">
                 {% endif %}
-                {% if form.machine_type.errors %}<ul class="errorlist">{{ form.machine_type.errors }}</ul>{% endif %}
+                {% if form.machine_type.errors %}<div class="invalid-feedback">{{ form.machine_type.errors }}</div>{% endif %}
             </div>
         </div>
 
         {# --- 3. Machine Specific Forms (Dynamically Hidden) --- #}
 
         {# Laser Cutting Specs - Use lc_form OR spec_form from update view #}
-        <div id="laser_cutting_specs">
-            <h4 class="mb-1">Laser Cutting Specifications</h4>
-            <hr class="mt-1 mb-3 border-2">
+        <div id="laser_cutting_specs" class="spec-section">
+            <h4 class="mb-3" style="color: #2c3e50;">Laser Cutting Specifications</h4>
             {% with spec_fields=lc_form %}
                 {% for field in spec_fields %}
                     {% if field.name != 'quote' %}
-                    {% if field.field.widget.input_type == 'checkbox' %}
-                    <div class="row mb-3">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
-                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
-                                {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
-                            </div>
+                    <div class="form-group">
+                        {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
+                            <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
-                    </div>
-                    {% else %}
-                    <div class="row mb-3">
-                        <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{ field.label }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder="Enter {{ field.label|lower }}">
-                            {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
+                        {% else %}
+                        <div class="coolinput">
+                            <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
+                            <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder=" ">
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endwith %}
         </div>
 
         {# Press Brake Specs - Use pb_form OR spec_form from update view #}
-        <div id="press_brake_specs">
-            <h4 class="mb-1">Press Brake Specifications</h4>
-            <hr class="mt-1 mb-3 border-2">
+        <div id="press_brake_specs" class="spec-section">
+            <h4 class="mb-3" style="color: #2c3e50;">Press Brake Specifications</h4>
             {% with spec_fields=pb_form %}
                 {% for field in spec_fields %}
                     {% if field.name != 'quote' %}
-                    {% if field.field.widget.input_type == 'checkbox' %}
-                    <div class="row mb-3">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
-                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
-                                {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
-                            </div>
+                    <div class="form-group">
+                        {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
+                            <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
-                    </div>
-                    {% else %}
-                    <div class="row mb-3">
-                        <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{ field.label }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder="Enter {{ field.label|lower }}">
-                            {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
+                        {% else %}
+                        <div class="coolinput">
+                            <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
+                            <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder=" ">
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endwith %}
         </div>
 
         {# Tube Laser Specs - Use tl_form OR spec_form from update view #}
-        <div id="tube_laser_specs">
-            <h4 class="mb-1">Tube Laser Cutting Specifications</h4>
-            <hr class="mt-1 mb-3 border-2">
+        <div id="tube_laser_specs" class="spec-section">
+            <h4 class="mb-3" style="color: #2c3e50;">Tube Laser Cutting Specifications</h4>
             {% with spec_fields=tl_form %}
                 {% for field in spec_fields %}
                     {% if field.name != 'quote' %}
-                    {% if field.field.widget.input_type == 'checkbox' %}
-                    <div class="row mb-3">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
-                                <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
-                                {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
-                            </div>
+                    <div class="form-group">
+                        {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
+                            <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
-                    </div>
-                    {% else %}
-                    <div class="row mb-3">
-                        <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{ field.label }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder="Enter {{ field.label|lower }}">
-                            {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
+                        {% else %}
+                        <div class="coolinput">
+                            <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
+                            <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder=" ">
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endwith %}
@@ -163,51 +145,72 @@
 
         {# --- 4. Remaining Main Quote Fields --- #}
         
-        <div class="row mb-3">
-            <label for="{{ form.additional_requirements.id_for_label }}" class="col-sm-2 col-form-label">{{ form.additional_requirements.label }}</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" id="{{ form.additional_requirements.id_for_label }}" name="{{ form.additional_requirements.name }}"></textarea>
-                {% if form.additional_requirements.errors %}<ul class="errorlist">{{ form.additional_requirements.errors }}</ul>{% endif %}
+        <div class="form-group">
+            <div class="coolinput">
+                <label for="{{ form.additional_requirements.id_for_label }}" class="text">{{ form.additional_requirements.label }}</label>
+                <textarea class="input" id="{{ form.additional_requirements.id_for_label }}" name="{{ form.additional_requirements.name }}" rows="3" style="resize: vertical; min-height: 100px;"></textarea>
+                {% if form.additional_requirements.errors %}<div class="invalid-feedback">{{ form.additional_requirements.errors }}</div>{% endif %}
             </div>
         </div>
-        <div class="row mb-3">
-            <label for="{{ form.attachment.id_for_label }}" class="col-sm-2 col-form-label">Attachment (Optional, max 5MB):</label>
-            <div class="col-sm-10">
+        
+        <div class="form-group">
+            <div class="coolinput">
+                <label for="{{ form.attachment.id_for_label }}" class="text">Attachment (Optional, max 5MB)</label>
                 <div class="file-input-container">
                     <input type="file" name="{{ form.attachment.name }}" 
                            id="{{ form.attachment.id_for_label }}" 
                            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
                            onchange="validateAndShowFile(this)"
-                           class="form-control">
+                           class="input"
+                           style="padding: 12px 15px; cursor: pointer;">
                 </div>
-                <div id="file-info" class="file-info"></div>
-                <div id="file-error" class="error-message" style="color: red; display: none;"></div>
-                {% if form.attachment.errors %}<ul class="errorlist">{{ form.attachment.errors }}</ul>{% endif %}
+                <div id="file-info" class="file-info mt-2" style="font-size: 0.85rem; color: #6c757d;"></div>
+                <div id="file-error" class="invalid-feedback" style="display: none;"></div>
+                {% if form.attachment.errors %}<div class="invalid-feedback">{{ form.attachment.errors }}</div>{% endif %}
             </div>
         </div>
 
         {# Handle existing file attachment display and delete checkbox #}
         {% if form.instance.attachment %}
-            <div class="mb-3" style="margin-top: 10px; font-size: 0.9em;">
-                Current file: <a href="{{ form.instance.attachment.url }}" target="_blank">{{ form.instance.attachment.name|default:"File" }}</a>
-                <br>
-                <input type="checkbox" name="attachment-clear" id="attachment-clear"> 
-                <label for="attachment-clear" style="display: inline; font-weight: normal;">Clear current attachment</label>
+            <div class="mb-4 p-3" style="border: 1px solid #dee2e6; border-radius: 5px; background-color: #f8f9fa;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        <a href="{{ form.instance.attachment.url }}" target="_blank" class="text-decoration-none">
+                            {{ form.instance.attachment.name|default:"File"|truncatechars:40 }}
+                        </a>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="attachment-clear" id="attachment-clear">
+                        <label class="form-check-label" for="attachment-clear" style="font-weight: normal; font-size: 0.9rem;">
+                            Remove file
+                        </label>
+                    </div>
+                </div>
             </div>
         {% endif %}
 
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="{{ form.completed.id_for_label }}" name="{{ form.completed.name }}">
-            <label for="{{ form.completed.id_for_label }}" class="form-check-label">Completed</label>
-            {% if form.completed.errors %}<ul class="errorlist">{{ form.completed.errors }}</ul>{% endif %}
+        <div class="form-group mt-4">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="{{ form.completed.id_for_label }}" name="{{ form.completed.name }}" {% if form.completed.value %}checked{% endif %}>
+                <label class="form-check-label" for="{{ form.completed.id_for_label }}" style="font-weight: 500;">
+                    Mark as completed
+                </label>
+                {% if form.completed.errors %}<div class="invalid-feedback">{{ form.completed.errors }}</div>{% endif %}
+            </div>
         </div>
         
-        <div class="row mb-3">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-10 text-end">
-                <button type="submit" class="btn btn-primary">Save Quote</button>
-                <a href="{% url 'quotes' %}" class="btn btn-secondary">Cancel</a>
-            </div>
+        <div class="d-flex justify-content-end gap-3 mt-5">
+            <a href="{% url 'quotes' %}" class="action-button" style="--button_outline_color: #6c757d; text-decoration: none;">
+                <span class="button-top">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </span>
+            </a>
+            <button type="submit" class="action-button" style="--button_outline_color: #0d6efd;">
+                <span class="button-top">
+                    <i class="fas fa-save me-1"></i> {% if form.instance.pk %}Update{% else %}Create{% endif %} Quote
+                </span>
+            </button>
         </div>
     </form>
 </div>

@@ -1,6 +1,6 @@
 /* Main container */
 body > .container {
-    max-width: 900px;    
+    max-width: 1000px;    
     margin: 20px auto;
     padding: 0 15px;
 }
@@ -16,6 +16,8 @@ table {
     margin-top: 20px;
     border-collapse: separate;
     border-spacing: 0;
+    border-radius: 1em;
+    border-color: #033466;
 }
 
 th, td {
@@ -24,30 +26,99 @@ th, td {
     border-bottom: 1px solid #dee2e6;
 }
 
-th {
-    background-color: #f8f9fa;
+/* Truncate long text in title cells */
+td.title-cell {
+    max-width: 250px; /* Adjust this value as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+table thead th {
+    background-color: #e8e8e8 !important;
+    color: rgb(49, 49, 49) !important;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    color: #6B7280;
+}
+
+/* Status filter buttons */
+.status-filter-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.status-filter-btn {
+    --button_radius: 0.5em;
+    --button_color: #e8e8e8;
+    --button_outline_color: #6c757d;
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.status-filter-btn .button-top {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid var(--button_outline_color);
+    border-radius: var(--button_radius);
+    padding: 0.5em 1em;
+    background: var(--button_color);
+    color: var(--button_outline_color);
+    transform: translateY(-0.1em);
+    transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* Button colors for different statuses */
+.status-filter-btn[data-status="all"] {
+    --button_outline_color: #6c757d;
+}
+
+.status-filter-btn[data-status="pending"] {
+    --button_outline_color: #ffc107;
+}
+
+.status-filter-btn[data-status="completed"] {
+    --button_outline_color: #198754;
+}
+
+/* Hover and active states */
+.status-filter-btn:hover .button-top {
+    transform: translateY(-0.2em);
+}
+
+.status-filter-btn:active .button-top {
+    transform: translateY(0);
+}
+
+.status-filter-btn.active .button-top {
+    background-color: var(--button_outline_color);
+    color: white;
+    transform: translateY(0);
 }
 
 /* Row styles - targeting table cells directly */
 .table tbody tr.completed td {
-    background-color: #E8F5ED !important;  /* Light green wash */
+    background-color: #C6EFCE !important;  /* Very light green */
 }
 
 .table tbody tr.pending td {
-    background-color: #FFF4E5 !important;  /* Light amber wash */
+    background-color: #FFF2CC !important;  /* Very light orange */
 }
 
 .table tbody tr.completed:hover td {
-    background-color: #d4eddf !important;  /* Slightly darker green on hover */
+    background-color: #e8e8e8 !important;  /* Slightly darker green on hover */
 }
 
 .table tbody tr.pending:hover td {
-    background-color: #f5e4d1 !important;  /* Slightly darker amber on hover */
+    background-color: #e8e8e8 !important;  /* Slightly darker orange on hover */
 }
 
 /* Reset Bootstrap's default hover */
@@ -70,6 +141,54 @@ th {
 /* Action buttons */
 a {
     color: #4b5563;
+}
+
+/* Action Button */
+.action-button {
+    --button_radius: 0.5em;
+    --button_color: #e8e8e8;
+    --button_outline_color: #0d6efd; /* Bootstrap primary blue */
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.action-button .button-top {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid var(--button_outline_color);
+    border-radius: var(--button_radius);
+    padding: 0.5em 1em;
+    background: var(--button_color);
+    color: var(--button_outline_color);
+    transform: translateY(-0.1em);
+    transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.action-button:hover .button-top {
+    transform: translateY(-0.2em);
+}
+
+.action-button:active .button-top {
+    transform: translateY(0);
+}
+
+.action-button:hover .button-top {
+    background-color: #e0e0e0;
+}
+
+.action-button:active .button-top {
+    background-color: var(--button_outline_color);
+    color: white;
     text-decoration: none;
     margin: 0 5px;
 }
@@ -81,6 +200,82 @@ a:hover {
 /* Form elements */
 button, input[type="submit"], input[type="checkbox"] {
     cursor: pointer;
+}
+
+/* Search Form */
+.search-form {
+    min-width: 250px;
+    --button_radius: 0.5em;
+    --button_color: #e8e8e8;
+    --button_outline_color: #6c757d;
+}
+
+.search-group {
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    border: 2px solid var(--button_outline_color);
+    border-radius: var(--button_radius) 0 0 var(--button_radius);
+    padding-left: 0.75rem;
+    height: 38px;
+    border-right: none;
+    box-shadow: none;
+    transition: border-color 0.2s ease;
+    background-color: var(--button_color);
+    color: var(--button_outline_color);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--button_outline_color);
+    box-shadow: none;
+}
+
+.search-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--button_outline_color);
+    border-left: none;
+    border-right: none;
+    background-color: var(--button_color);
+    color: var(--button_outline_color);
+    padding: 0 0.75rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    height: 38px;
+}
+
+.search-clear:hover {
+    background-color: #e0e0e0;
+}
+
+.search-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--button_outline_color);
+    border-radius: 0 var(--button_radius) var(--button_radius) 0;
+    background-color: var(--button_color);
+    color: var(--button_outline_color);
+    padding: 0 0.75rem;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    height: 38px;
+    white-space: nowrap;
+}
+
+.search-submit:hover {
+    background-color: #e0e0e0;
+}
+
+.search-submit:active {
+    background-color: var(--button_outline_color);
+    color: white;
 }
 
 /* Responsive adjustments */
