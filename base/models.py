@@ -17,6 +17,7 @@ class Quote(models.Model):
         ('laser_cutting', 'Laser Cutting'),
         ('press_brake', 'Press Brake'), 
         ('tube_laser', 'Tube Laser Cutting'),
+        ('other', 'Other'),
     ]
     machine_type = models.CharField(max_length=50, choices=MACHINE_CHOICES)
 
@@ -32,6 +33,8 @@ class Quote(models.Model):
 
     def get_spec_model(self):
         """Returns the related specification object based on machine_type."""
+        if self.machine_type == 'other':
+            return None
         if self.machine_type == 'laser_cutting':
             # Note: This relies on the default related name (model_name.lower())
             return self.lasercuttingspec
