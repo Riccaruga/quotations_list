@@ -35,7 +35,7 @@
                            name="search" 
                            value="{{ search_query }}" 
                            class="search-input" 
-                           placeholder="Search by manager or client...">
+                           placeholder="Search...">
                     {% if search_query %}
                         <a href="?status={{ current_status }}" class="search-clear">
                             <i class="bi bi-x"></i>
@@ -43,7 +43,6 @@
                     {% endif %}
                     <button class="search-submit" type="submit">
                         <i class="bi bi-search me-1"></i>
-                        <span>Search</span>
                     </button>
                 </div>
             </form>
