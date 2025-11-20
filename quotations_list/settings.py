@@ -81,7 +81,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'quotations_db',
             'USER': 'postgres',
-            'PASSWORD': '1',
+            'PASSWORD': 'KxnmLoO21oIyPT82Eym0vGNlqkDjk8rb',
             'HOST': 'localhost',
             'PORT': '5432',
         }
