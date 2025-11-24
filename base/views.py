@@ -105,7 +105,9 @@ class QuoteCreate(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('quotes')
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        # Don't call parent's get_context_data to avoid the object attribute issue
+        context = {}
+        context['form'] = self.get_form()
         # Pass all unbound spec forms to the template for initial rendering
         context['lc_form'] = LaserCuttingForm()
         context['pb_form'] = PressBrakeForm()
