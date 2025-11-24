@@ -80,15 +80,15 @@ WSGI_APPLICATION = 'quotations_list.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Database configuration
+# Database configuration from environment variables
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME', default='quotations_db'),
-        'USER': env('DB_USER', default='gillian'),
-        'PASSWORD': env('DB_PASSWORD', default='KxnmLoO21oIyPT82Eym0vGNlqkDjk8rb'),
-        'HOST': env('DB_HOST', default='dpg-d4fi5v5rnu6s73e4sjdg-a'),
-        'PORT': env('DB_PORT', default='5432'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
