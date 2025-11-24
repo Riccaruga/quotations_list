@@ -12,11 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
-import environ
-
-# Initialize environment variables
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='your-secret-key-here')
+SECRET_KEY = 'django-insecure-o*t$2cu6w8bpd6o1+6$g@cwm&*5*r7$as6mazsx_m!v8*yoahl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = True
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', 'quotations-list-pxdb.onrender.com'])
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,15 +74,14 @@ WSGI_APPLICATION = 'quotations_list.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Database configuration from environment variables
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
+        'NAME': 'quotations_db',           # Database name
+        'USER': 'postgres',                # Default superuser
+        'PASSWORD': '1',                   # Your PostgreSQL password
+        'HOST': 'localhost',               # Use 'localhost' if PostgreSQL is running on the same machine
+        'PORT': '5432',                    # Default PostgreSQL port
     }
 }
 
