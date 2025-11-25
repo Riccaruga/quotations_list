@@ -148,7 +148,7 @@
         <div class="form-group">
             <div class="coolinput">
                 <label for="{{ form.additional_requirements.id_for_label }}" class="text">{{ form.additional_requirements.label }}</label>
-                <textarea class="input" id="{{ form.additional_requirements.id_for_label }}" name="{{ form.additional_requirements.name }}" rows="3" style="resize: vertical; min-height: 100px;"></textarea>
+                <textarea class="input" id="{{ form.additional_requirements.id_for_label }}" name="{{ form.additional_requirements.name }}" rows="3" style="resize: vertical; min-height: 100px;">{{ form.additional_requirements.value|default:'' }}</textarea>
                 {% if form.additional_requirements.errors %}<div class="invalid-feedback">{{ form.additional_requirements.errors }}</div>{% endif %}
             </div>
         </div>

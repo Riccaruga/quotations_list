@@ -61,6 +61,9 @@ class LaserCuttingSpec(models.Model):
     compressor = models.BooleanField(default=False)
     stabilizer = models.BooleanField(default=False)
     bevel_laser_head = models.BooleanField(default=False)
+    interchangeable_tables = models.BooleanField(default=False)
+    cabinet_protection = models.BooleanField(default=False)
+    tube_cutting_module = models.BooleanField(default=False)
 
 class PressBrakeSpec(models.Model):
     quote = models.OneToOneField(Quote, on_delete=models.CASCADE)
