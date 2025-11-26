@@ -41,10 +41,17 @@ class PressBrakeForm(forms.ModelForm):
     class Meta:
         model = PressBrakeSpec
         # CRITICAL: Exclude the FK field so it can be set in the view after Quote is saved
-        exclude = ['quote'] 
+        exclude = ['quote']
+        widgets = {
+            'CNC_type': forms.Select(attrs={'class': 'form-control'}),
+            'axis_type': forms.Select(attrs={'class': 'form-control'})
+        }
 
 class TubeLaserForm(forms.ModelForm):
     class Meta:
         model = TubeLaserSpec
         # CRITICAL: Exclude the FK field so it can be set in the view after Quote is saved
         exclude = ['quote']
+        widgets = {
+            'loading_type': forms.Select(attrs={'class': 'form-control'})
+        }

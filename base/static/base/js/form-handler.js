@@ -6,6 +6,64 @@ document.addEventListener('DOMContentLoaded', function() {
         'tube_laser': document.getElementById('tube_laser_specs'),
     };
 
+    // Function to toggle tube module fields based on checkbox state
+    function toggleTubeModuleFields(show) {
+        // Get all tube module fields by their name attributes
+        const tubeLengthField = document.querySelector('input[name$="tube_module_length"]');
+        const tubeDiameterField = document.querySelector('input[name$="tube_module_diameter"]');
+        
+        // Toggle tube_module_length field and its container
+        if (tubeLengthField) {
+            const lengthContainer = tubeLengthField.closest('.form-group');
+            if (lengthContainer) {
+                lengthContainer.style.display = show ? 'block' : 'none';
+                // Make sure the input and its label are visible
+                if (show) {
+                    const coolInput = lengthContainer.querySelector('.coolinput');
+                    if (coolInput) coolInput.style.display = 'block';
+                    const label = lengthContainer.querySelector('label');
+                    if (label) label.style.display = 'block';
+                    tubeLengthField.style.display = 'block';
+                }
+            }
+        }
+        
+        // Toggle tube_module_diameter field and its container
+        if (tubeDiameterField) {
+            const diameterContainer = tubeDiameterField.closest('.form-group');
+            if (diameterContainer) {
+                diameterContainer.style.display = show ? 'block' : 'none';
+                // Make sure the input and its label are visible
+                if (show) {
+                    const coolInput = diameterContainer.querySelector('.coolinput');
+                    if (coolInput) coolInput.style.display = 'block';
+                    const label = diameterContainer.querySelector('label');
+                    if (label) label.style.display = 'block';
+                    tubeDiameterField.style.display = 'block';
+                }
+            }
+        }
+    }
+
+    // Setup tube module fields visibility on page load
+    function setupTubeModuleFields() {
+        const tubeCuttingCheckbox = document.querySelector('input[name$="tube_cutting_module"]');
+        if (tubeCuttingCheckbox) {
+            // Initial state - hide tube module fields by default
+            toggleTubeModuleFields(false);
+            
+            // Show them if the checkbox is checked
+            if (tubeCuttingCheckbox.checked) {
+                toggleTubeModuleFields(true);
+            }
+            
+            // Update on change
+            tubeCuttingCheckbox.addEventListener('change', function() {
+                toggleTubeModuleFields(this.checked);
+            });
+        }
+    }
+
     function toggleSpecSection(selectedType) {
         // Hide all sections first
         Object.values(specSections).forEach(section => {
@@ -18,6 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const relevantSection = specSections[selectedType];
         if (relevantSection) {
             relevantSection.classList.remove('spec-form-hidden');
+            
+            // If this is the laser cutting section, set up the tube module fields
+            if (selectedType === 'laser_cutting') {
+                // Use setTimeout to ensure the DOM is updated before setting up the fields
+                setTimeout(setupTubeModuleFields, 0);
+            }
         }
     }
 
@@ -29,6 +93,11 @@ document.addEventListener('DOMContentLoaded', function() {
         machineTypeSelect.addEventListener('change', function() {
             toggleSpecSection(this.value);
         });
+        
+        // Also set up tube module fields if laser cutting is the initial selection
+        if (machineTypeSelect.value === 'laser_cutting') {
+            setupTubeModuleFields();
+        }
     }
 
     // File validation on form submit

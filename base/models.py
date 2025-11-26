@@ -64,6 +64,8 @@ class LaserCuttingSpec(models.Model):
     interchangeable_tables = models.BooleanField(default=False)
     cabinet_protection = models.BooleanField(default=False)
     tube_cutting_module = models.BooleanField(default=False)
+    tube_module_length = models.CharField(max_length=200, blank=True, null=True)  
+    tube_module_diameter = models.CharField(max_length=200, blank=True, null=True)
 
 class PressBrakeSpec(models.Model):
     quote = models.OneToOneField(Quote, on_delete=models.CASCADE)
