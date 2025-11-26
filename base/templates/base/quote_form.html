@@ -6,6 +6,13 @@
     .spec-form-hidden {
         display: none;
     }
+    /* Hide tube module fields by default */
+    .tube-module-field {
+        display: none;
+    }
+    .tube-module-field + label {
+        display: none;
+    }
 </style>
 
 <div>
@@ -67,12 +74,19 @@
 
         {# Laser Cutting Specs - Use lc_form OR spec_form from update view #}
         <div id="laser_cutting_specs" class="spec-section">
-            <h4 class="mb-3" style="color: #2c3e50;">Laser Cutting Specifications</h4>
+            <h4 class="mt-4 mb-1">Laser Cutting Specifications</h4>
+            <hr class="mt-1 mb-3 border-2">
             {% with spec_fields=lc_form %}
                 {% for field in spec_fields %}
                     {% if field.name != 'quote' %}
-                    <div class="form-group">
-                        {% if field.field.widget.input_type == 'checkbox' %}
+                    <div class="form-group {% if field.name == 'tube_module_length' or field.name == 'tube_module_diameter' %}tube-module-container{% endif %}">
+                        {% if field.field.widget.input_type == 'checkbox' and field.name != 'tube_cutting_module' %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
+                            <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
+                        </div>
+                        {% elif field.name == 'tube_cutting_module' %}
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.value %}checked{% endif %}>
                             <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
@@ -93,7 +107,8 @@
 
         {# Press Brake Specs - Use pb_form OR spec_form from update view #}
         <div id="press_brake_specs" class="spec-section">
-            <h4 class="mb-3" style="color: #2c3e50;">Press Brake Specifications</h4>
+            <h4 class="mt-4 mb-1" style="color: #2c3e50;">Press Brake Specifications</h4>
+            <hr class="mt-1 mb-3 border-2">
             {% with spec_fields=pb_form %}
                 {% for field in spec_fields %}
                     {% if field.name != 'quote' %}
@@ -104,10 +119,23 @@
                             <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
                             {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
+                        {% elif field.name == 'CNC_type' or field.name == 'axis_type' %}
+                        <div class="coolinput">
+                            <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
+                            <select class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.required %}required{% endif %}>
+                                <option value="">Select {{ field.label }}</option>
+                                {% for value, label in field.field.choices %}
+                                    {% if value %}
+                                    <option value="{{ value }}" {% if field.value == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
+                        </div>
                         {% else %}
                         <div class="coolinput">
                             <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
-                            <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder=" ">
+                            <input type="text" class="input {% if field.name == 'tube_module_length' or field.name == 'tube_module_diameter' %}tube-module-field{% endif %}" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder=" ">
                             {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
                         {% endif %}
@@ -119,7 +147,8 @@
 
         {# Tube Laser Specs - Use tl_form OR spec_form from update view #}
         <div id="tube_laser_specs" class="spec-section">
-            <h4 class="mb-3" style="color: #2c3e50;">Tube Laser Cutting Specifications</h4>
+            <h4 class="mt-4 mb-1" style="color: #2c3e50;">Tube Laser Cutting Specifications</h4>
+            <hr class="mt-1 mb-3 border-2">
             {% with spec_fields=tl_form %}
                 {% for field in spec_fields %}
                     {% if field.name != 'quote' %}
@@ -130,10 +159,27 @@
                             <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
                             {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
+                        {% elif field.name == 'loading_type' %}
+                        <div class="coolinput">
+                            <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
+                            <select class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" {% if field.required %}required{% endif %}>
+                                <option value="">Select {{ field.label }}</option>
+                                {% for value, label in field.field.choices %}
+                                    {% if value %}
+                                    <option value="{{ value }}" {% if field.value == value|stringformat:'s' %}selected{% endif %}>{{ label }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
+                        </div>
                         {% else %}
                         <div class="coolinput">
                             <label for="{{ field.id_for_label }}" class="text">{{ field.label }}</label>
-                            <input type="text" class="input" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" placeholder=" ">
+                            <input type="text" class="input {% if field.name == 'tube_module_length' or field.name == 'tube_module_diameter' %}tube-module-field{% endif %}" 
+                                   id="{{ field.id_for_label }}" 
+                                   name="{{ field.name }}" 
+                                   value="{{ field.value|default:'' }}" 
+                                   placeholder=" ">
                             {% if field.errors %}<div class="invalid-feedback">{{ field.errors }}</div>{% endif %}
                         </div>
                         {% endif %}
