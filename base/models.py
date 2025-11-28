@@ -90,7 +90,8 @@ class TubeLaserSpec(models.Model):
     tube_length = models.CharField(max_length=200, blank=True, null=True)  # e.g. "6000 mm"
     tube_diameter = models.CharField(max_length=200, blank=True, null=True)  # e.g. "300 mm"
     length_of_unloading_table = models.CharField(max_length=200, blank=True, null=True)  # e.g. "3000 mm"
-
+    laser_source_power = models.CharField(max_length=200, blank=True, null=True)  # e.g. "3000W"
+    
     LOADING_CHOICES = [
        ('automatic', 'Automatic'),
        ('semi_automatic', 'Semi-Automatic'),
@@ -100,3 +101,4 @@ class TubeLaserSpec(models.Model):
     
     two_chucks = models.BooleanField(default=False)
     three_chucks = models.BooleanField(default=False)
+    bevel_laser_head = models.BooleanField(default=False)

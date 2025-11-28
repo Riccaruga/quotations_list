@@ -3,3 +3,6 @@
 /base/__pycache__
 /base/__pycache__
 *.pyc
+*.pyc
+/base/__pycache__
+/base/__pycache__
